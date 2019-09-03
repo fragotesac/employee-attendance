@@ -1,0 +1,73 @@
+<?= $this->doctype() ?>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+	<?=
+	$this->headMeta()
+		->appendName('viewport', 'width=device-width, initial-scale=1.0')
+		->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+	?>
+    <!-- Favicon icon -->
+	<?= $this->headTitle(\Business\Settings::BusinessName)->setSeparator(' - ')->setAutoEscape(false) ?>
+
+    <!-- Le styles -->
+	<?=
+	$this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon',
+		'href' => $this->basePath() . '/images/favicon.ico'])
+		->prependStylesheet($this->basePath('css/lib/sweetalert/sweetalert.css'))
+		//->prependStylesheet($this->basePath('css/style.css'))
+		->prependStylesheet($this->basePath('css/login.css'))
+	?>
+	<?=
+	$this->headScript()
+		->appendFile($this->basePath('js/lib/jquery/jquery.min.js'));
+	?>
+</head>
+
+<body>
+<div class="stars1"></div>
+<div class="stars2"></div>
+<div class="login-wrap">
+    <div class="center">
+        <div class="header">
+            <h2 class="animation a1">
+                <div class="a1"> <img width="200" src="/images/logo_fgt.png"> </div>
+                <br/>
+                Attendance
+            </h2>
+            <br/>
+            <h4 class="animation a2">
+                Log in to your account using username and password
+            </h4>
+        </div>
+        <form method="POST">
+            <div class="form">
+                <input type="text" name="usuario" class="form-field animation a3" placeholder="Username">
+                <input type="password" name="clave" class="form-field animation a4" placeholder="Password">
+                <!--<p class="animation a5"><a href="#">Forgot Password</a></p>-->
+                <button class="animation a6">LOGIN</button>
+            </div>
+        </form>
+    </div>
+</div>
+<?=
+$this->headScript()
+	->appendFile($this->basePath('js/lib/bootstrap/js/popper.min.js'))
+	->appendFile($this->basePath('js/lib/bootstrap/js/bootstrap.min.js'))
+	->appendFile($this->basePath('js/jquery.slimscroll.js'))
+	->appendFile($this->basePath('js/sidebarmenu.js'))
+	->appendFile($this->basePath('js/lib/sticky-kit-master/dist/sticky-kit.min.js'))
+	->appendFile($this->basePath('js/lib/morris-chart/raphael-min.js'))
+	->appendFile($this->basePath('js/lib/morris-chart/morris.js'))
+	->appendFile($this->basePath('js/lib/morris-chart/dashboard1-init.js'))
+	->appendFile($this->basePath('js/lib/calendar-2/moment.latest.min.js'))
+	->appendFile($this->basePath('js/lib/calendar-2/semantic.ui.min.js'))
+	->appendFile($this->basePath('js/lib/calendar-2/prism.min.js'))
+	->appendFile($this->basePath('js/lib/sweetalert/sweetalert.min.js'))
+	->appendFile($this->basePath('js/scripts.js'))
+?>
+<?php $this->FlashMsg(); ?>
+<?= $this->inlineScript() ?>
+</body>
+</html>

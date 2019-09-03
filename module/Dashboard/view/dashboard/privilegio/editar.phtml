@@ -1,0 +1,94 @@
+<?php
+echo $this->partial('business/crud/agregar');
+?>
+<script>
+    $(document).ready(function() {
+        $('#menu_id').multiSelect({
+            afterSelect: function(values){
+                var options = '';
+                $.each(<?= json_encode($this->permiso) ?>, function (i, item) {
+                    options += '<option value="' + i + '">' + item + '</option>';
+                });
+
+                swal({
+                        title: 'Atención!',
+                        text: 'Seleccione el permiso para este perfil<br><select id="permSel">' + options + '</select>',
+                        html: true,
+                        input: 'select',
+                        showCancelButton: false
+                    },
+                    function (isConfirm) {
+                        if (!isConfirm) {
+                            deselect('menu_id', values);
+                        } else {
+                            var dsc;
+                            switch ($('#permSel').val()) {
+                                case '1':
+                                    dsc = '[Acceso Total]';
+                                    break;
+                                case '2':
+                                    dsc = '[Eliminacion]';
+                                    break;
+                                case '3':
+                                    dsc = '[Escritura]';
+                                    break;
+                                case '4':
+                                    dsc = '[Lectura]';
+                                    break;
+                            }
+
+                            $('#menu_id option[value="' + values + '"]').append(' ' + dsc);
+                            $('#menu_id option[value="' + values + '"]').attr('value', values + '-' + $('#permSel').val());
+                            mtrefresh('menu_id');
+                        }
+                    });
+            },
+            afterDeselect: function(values){
+                var oldId = '' + values;
+                var oldText = $('#menu_id option[value="' + values + '"]').text();
+                $('#menu_id option[value="' + values + '"]').text(oldText.replace(/ *\[[^)]*\] */g, ""));
+                $('#menu_id option[value="' + values + '"]').attr('value', oldId.slice(0, -2));
+
+                mtrefresh('menu_id');
+            }
+        });
+        inicializarData();
+    });
+
+    function inicializarData()
+    {
+        $(<?= json_encode($this->data_update) ?>).each(function(j, data) {
+            var dsc;
+            switch (data.permiso) {
+                case '1':
+                    dsc = '[Acceso Total]';
+                    break;
+                case '2':
+                    dsc = '[Eliminacion]';
+                    break;
+                case '3':
+                    dsc = '[Escritura]';
+                    break;
+                case '4':
+                    dsc = '[Lectura]';
+                    break;
+            }
+            $('#menu_id option[value="' + data.menu_id + '"]').attr('selected', 'selected');
+            $('#menu_id option[value="' + data.menu_id + '"]').append(' ' + dsc);
+            $('#menu_id option[value="' + data.menu_id + '"]').attr('value', data.menu_id + '-' + data.permiso);
+
+        });
+
+        mtrefresh('menu_id');
+    }
+
+    function deselect(multiselect, elementid)
+    {
+        $('#' + multiselect).multiSelect('deselect', elementid);
+    }
+
+    function mtrefresh(multiselect)
+    {
+        $('#' + multiselect).multiSelect('refresh');
+    }
+</script>

@@ -1,0 +1,142 @@
+<div class="container-fluid">
+    <!-- Start Page Content -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-30">
+                <div class="media">
+                    <div class="media-left meida media-middle">
+                        <span><i class="fa fa-calendar f-s-40 color-success" aria-hidden="true"></i></span>
+                    </div>
+                    <div class="media-body media-text-right">
+                        <h2>
+                            <div id="timedate">
+                                <a id="mon">January</a>&nbsp;<a id="d">1</a>,&nbsp;<a id="y">0</a><br/>
+                                <a id="h">12</a>:<a id="m">00</a>:<a id="s">00</a>
+                            </div>
+                        </h2>
+                        <p class="m-b-0">Fecha Actual</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-30">
+                <div class="media">
+                    <div class="media-left meida media-middle">
+                        <span><i class="fa  fa-briefcase f-s-40 color-primary"></i></span>
+                    </div>
+                        <div class="media-body media-text-right">
+                            <form method="POST">
+                            <div class="text-right">
+                                <div class="row">
+                                    <div class="col-2">
+                                    </div>
+                                    <div class="col-4">
+                                        <h2>
+                                            <label class="control-label">Marcación:</label>
+                                        </h2>
+                                    </div>
+                                    <div class="col-6">
+                                        <select name="status" class="form-control">
+                                            <?php foreach ($statuses as $statusCode => $status) { ?>
+                                                <option value="<?= $statusCode ?>"><?= ucwords(strtolower($status)) ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-10">
+                                        <input class="form-control" placeholder="Obsevación" type="text" name="observacion">
+                                    </div>
+                                    <div class="col-2">
+                                        <button type="submit" class="btn btn-primary m-b-10 m-l-5">
+                                            <i class="fa fa-floppy-o"></i> Guardar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-title">
+                    <h4>Marcaciones del Día</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Hora</th>
+                                <th>Observación</th>
+                                <th>Marcación</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($dayList as $key => $data) { ?>
+                            <tr>
+                                <td>
+		                             <?= $key + 1 ?>
+                                </td>
+                                <td>
+		                             <?= gmdate('H:i:s', $data['created_at']); ?>
+                                </td>
+                                <td>
+		                             <?= $data['observacion']; ?>
+                                </td>
+                                <td>
+                                    <?php $badgeType = ['success', 'secondary', 'info', 'warning']; ?>
+                                    <span class="badge badge-<?= $badgeType[$data['status'] - 1] ?>">
+                                       <?= ucwords(strtolower(\Business\Model\Asistencia::STATUSES[$data['status']])); ?>
+                                    </span>
+
+                                </td>
+                            </tr>
+                            <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End PAge Content -->
+</div>
+<script>
+    $(document).ready(function(){
+        initClock();
+    });
+    // START CLOCK SCRIPT
+    Number.prototype.pad = function(n) {
+        for (var r = this.toString(); r.length < n; r = 0 + r);
+        return r;
+    };
+
+    function updateClock() {
+        var now = new Date();
+        var milli = now.getMilliseconds(),
+            sec = now.getSeconds(),
+            min = now.getMinutes(),
+            hou = now.getHours(),
+            mo = now.getMonth(),
+            dy = now.getDate(),
+            yr = now.getFullYear();
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        var tags = ["mon", "d", "y", "h", "m", "s"],
+            corr = [months[mo], dy, yr, hou.pad(2), min.pad(2), sec.pad(2), milli];
+        for (var i = 0; i < tags.length; i++)
+            document.getElementById(tags[i]).firstChild.nodeValue = corr[i];
+    }
+
+    function initClock() {
+        updateClock();
+        window.setInterval("updateClock()", 1);
+    }
+</script>

@@ -1,0 +1,171 @@
+<?php
+$title = $this->titulo;
+$this->headTitle($title);
+?>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <h1 class="card-title"><i class="fa fa-list-alt" aria-hidden="true"></i>&nbsp;<?php echo $title; ?></h1>
+                        <h2 class="card-subtitle">Listado</h2>
+                    </div>
+                    <div class="col-6 form-group text-right">
+                        <form method="GET">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button name="report" value="excel" type="submit" class="btn btn-success">
+                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                    Excel
+                                </button>
+                                <!--
+                                <button name="report" value="pdf" type="submit" class="btn btn-danger">
+                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                    PDF
+                                </button>
+                                -->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-12 form-group top_search">
+                        <?php if (in_array($this->urlPrefix . 'agregar', $this->acl()->getResources())) { ?>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <a class="btn btn-success" href="<?= $this->url($this->urlPrefix . 'agregar') ?>"><i
+                                            class="fa fa-plus-circle">&nbsp;</i>Agregar nuevo</a>
+                            </ul>
+                        <?php } ?>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                            <form method="GET">
+                                <div class="input-group">
+                                    <select name="columna" id="columna-buscar" class="col-md-3">
+                                        <?php foreach ($this->columnas as $id => $cabecera) { ?>
+                                            <option value="<?= $id ?>"><?= $cabecera ?></option>
+                                        <?php } ?>
+                                    </select>
+	                                <?php foreach ($this->columnas as $id => $cabecera) {
+			                                 if (!empty($this->dscColumn[$id]['FK']) || !empty($this->dscColumn[$id]['FUNC'])) {
+				                                 $fn = $this->dscColumn[$id]['FUNC'];
+				                             ?>
+                                                 <select name="<?= $id ?>" id="buscar-<?= $id ?>" class="custom-select chosen-select">
+					                                 <?php foreach ($this->fk[$fn] as $key => $data) { ?>
+                                                     <option value="<?= $key ?>"><?= $data ?></option>
+					                                 <?php } ?>
+                                                 </select>
+				                             <?php
+			                                 } else {
+			                                 ?>
+                                                 <input name="<?= $id ?>" id="buscar-<?= $id ?>" type="text" class="form-control cold-md-7 chosen-container" placeholder="Buscar ...">
+                                    <?php
+			                            }
+	                                } ?>
+                                    <span >
+                                <button class="btn btn-outline-secondary" type="submit">
+                                    <i class="fa fa-search">&nbsp;</i>
+                                </button>
+                            </span>
+                                </div>
+                            </form>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_content">
+                    <div class="table-responsive">
+                        <div id="listado" class="dataTables_wrapper no-footer">
+                        <div class="table-wrapper">
+                        <table  class="table table-striped table-hover dataTable" cellspacing="0" width="100%" role="grid" style="width: 100%;">
+                            <thead>
+                                <?php foreach ($this->columnas as $id => $cabecera) { ?>
+                                <th><?= $cabecera; ?></th>
+                                <?php } ?>
+                                <th></th>
+                            </thead>
+                            <?php if ($this->paginator->getTotalItemCount() > 0) { ?>
+                                <?php foreach ($this->paginator as $fila) : ?>
+                                    <tr>
+                                        <?php foreach ($this->columnas as $id => $cabecera) { ?>
+                                            <td>
+                                                <?php
+
+                                                if (!empty($this->dscColumn[$id]['FK']) || !empty($this->dscColumn[$id]['FUNC'])) {
+                                                    $fn = $this->dscColumn[$id]['FUNC'];
+                                                    if (empty($this->dscColumn[$id]['multiple'])) {
+                                                        echo !empty($this->fk[$fn][$fila->$id]) ? $this->fk[$fn][$fila->$id] : '<span class="badge badge-pill badge-dark">NULL</span>';
+                                                    } else {
+                                                        $fkData = $this->fk[$fn][$this->PKs($this->tableIds, $fila, true, true)];
+                                                        if (!empty($fkData)) {
+                                                            echo $fkData;
+                                                        } else {
+                                                            echo '<span class="badge badge-pill badge-dark">NULL</span>';
+                                                        }
+                                                    }
+                                                } else {
+                                                    echo $fila->$id;
+                                                }
+                                                ?>
+                                            </td>
+                                        <?php } ?>
+
+                                        <td>
+                                            <?php if (in_array($this->urlPrefix . 'editar', $this->acl()->getResources())) { ?>
+                                            <a class="btn btn-warning btn-sm"
+                                            href="<?= $this->url($this->urlPrefix . 'editar', $this->PKs($this->tableIds, $fila)) ?>"><i
+                                            class="fa fa-edit">&nbsp;</i>Editar</a>
+                                            <?php } ?>
+                                            <?php if (in_array($this->urlPrefix . 'eliminar', $this->acl()->getResources())) { ?>
+                                            <a class="btn btn-danger btn-sm"
+                                            href="<?= $this->url($this->urlPrefix . 'eliminar', $this->PKs($this->tableIds, $fila)) ?>"><i
+                                            class="fa fa-times-circle">&nbsp;</i>Eliminar</a>
+                                            <?php } ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php } else { ?>
+                                <tr>
+                                    <td colspan="<?= count($this->columnas) + 1 ?>">
+                                        <center>
+                                            <div class="alert alert-warning" role="alert">
+                                                No se encontró información
+                                            </div>
+                                        </center>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                        <?= $this->paginationControl(
+                            $this->paginator,
+                            'sliding',
+                            'business/partial/paginator',
+                            [$this->url($this->urlPrefix . 'listar')]
+                        ) ?>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('.chosen-single').css('height', '30px');
+        $('.chosen-container').css('display', 'none');
+        $('.chosen-container').addClass('col-md-7');
+
+        $('#columna-buscar').change(function(){
+            $('.chosen-container').addClass('hidden');
+            $('.chosen-container').css('display', 'none');
+            $('#buscar_' + $(this).val() + '_chosen').css('display', 'block');
+            $('input#buscar-' + $(this).val() ).css('display', 'block');
+        });
+        $('#columna-buscar').change();
+    });
+
+</script>

@@ -1,0 +1,44 @@
+<?php
+// module/Album/view/album/album/delete.phtml:
+
+$title = $this->titulo;
+$url   = ''/*$this->url('album', ['action' => 'delete', 'id' => $id])*/;
+
+$this->headTitle($title);
+?>
+<div>
+<div class="col-lg-12">
+
+    <div class="card">
+        <div class="card-body">
+<h1><?= $this->escapeHtml($title) ?></h1>
+
+<p>
+    Esta seguro de eliminar el registro de 
+    <?= $this->escapeHtml($this->dscItemEliminar) ?>?
+</p>
+
+<form action="<?= $url ?>" method="post" style="padding-left: 70%">
+    <br>
+
+    <div style="margin-left: 170px;">
+<div class="form-group">
+    <?php
+        $campos = $this->campos;
+        if (!empty($campos)) {
+            foreach ($campos as $keyField => $field) {
+                if (!empty($field['PK'])) {
+    ?>
+        <input type="hidden" name="<?= $keyField ?>" value="<?= $this->defaultValue[$keyField] ?>" />
+    <?php
+                }
+            }
+        }
+    ?>
+    <input type="submit" class="btn btn-danger" name="del" value="Si" />
+    <input type="button" class="btn btn-success" name="Back2" value="No" onclick="history.back()" />
+</div>
+</form>
+        </div>
+    </div>
+</div>
