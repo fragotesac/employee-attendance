@@ -120,24 +120,6 @@ class UserTable extends Model
       try {
          $data['username'] = strtolower($data['username']);
          $data['password'] = sha1(strtolower($data['password']));
-         // removing data
-         $this->fkTable['usuemp']->delete([
-            'siscod' => '01',
-            'usucod' => $data['username'],
-         ]);
-         $this->fkTable['ususuc']->delete([
-            'siscod' => '01',
-            'usucod' => $data['username'],
-         ]);
-
-         foreach ($empcod as $emp) {
-            $this->fkTable['usuemp']->insert([
-               'siscod' => '01',
-               'usucod' => $data['username'],
-               'empcod' => $emp,
-               'estado' => 'S'
-            ]);
-         }
 
          $rs = $this->tableGateway->insert($data);
       } catch (\Exception $e) {
@@ -152,15 +134,9 @@ class UserTable extends Model
 
    public function getData($dataKey)
    {
-      $dataRow = [];
+	   $dataUser = [];
       try {
          $dataUser = (array)$this->tableGateway->select($dataKey)->current();
-         $dataPermisos = $this->fkTable['ususuc']->select(['usucod' => $dataUser['username']])->toArray();
-         $permisos = [];
-         foreach ($dataPermisos as $permiso) {
-            $permisos[] = $permiso['empcod'] . '-' . $permiso['loccod'];
-         }
-         $dataUser['succod'] = $permisos;
       } catch (\Exception $e) {
          error_log($e->getMessage());
          $rs = false;
