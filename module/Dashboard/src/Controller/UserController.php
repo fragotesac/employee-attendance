@@ -24,7 +24,7 @@ class UserController extends ControllerCRUD
                 'TIPO' => 'VARCHAR',
                 'REQUIRED' => true,
                 'MIN_LENGHT' => 1,
-                'LENGHT' => 12
+                'LENGHT' => 200
             ],
            'password' => [
                 'PK' => 0,
