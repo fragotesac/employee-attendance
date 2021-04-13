@@ -49,8 +49,7 @@ class Module
 				},
 				Controller\UserController::class => function ($container) {
 					return new Controller\UserController  (
-						$container->get(Model\User::class),
-						$container->get(Model\Sucursal::class)
+						$container->get(Model\User::class)
 					);
 				},
 				Controller\ModuloController::class => function ($container) {
