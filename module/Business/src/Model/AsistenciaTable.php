@@ -24,4 +24,15 @@ class AsistenciaTable extends Model
 		return $this->fetchSql($sql, $select);
 	}
 
+    public function getAttendance(int $startDate, int $endDate) :? Result
+    {
+        $sql = $this->getSql();
+        $select = $sql->select();
+        $select->from(['a' => 'asistencia']);
+        $select->join(['u' => 'user'], 'u.id = a.user_id', ['full_name']);
+        $select->where->between('created_at', $startDate, $endDate);
+        $select->order('a.created_at, u.id ASC');
+
+        return $this->fetchSql($sql, $select);
+    }
 }

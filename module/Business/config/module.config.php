@@ -285,6 +285,11 @@ $routes = [
         'controller' => Dcontroller\NotificaController::class,
         'action'     => 'agregar',
     ],
+    'dashboard-asistencias' => [
+        'route' => '/dashboard/asistencias',
+        'controller' => Dcontroller\AsistenciasController::class,
+        'action'     => 'index',
+    ],
    // WebServices
    'integration-webservice-sincronizar' => [
       'route' => '/webservices/integracion',

@@ -66,13 +66,18 @@ class Module
 				Controller\LoginController::class => function ($container) {
 					return new Controller\LoginController(
 						$container->get(Adapter::class)
-                );
+                    );
 				},
 				Controller\IndexController::class => function ($container) {
 					return new Controller\IndexController(
 						$container->get(Model\Asistencia::class)
-               );
+                    );
 				},
+                Controller\AsistenciasController::class => function ($container) {
+                    return new Controller\AsistenciasController(
+                        $container->get(Model\Asistencia::class)
+                    );
+                },
 			],
 		];
 	}
