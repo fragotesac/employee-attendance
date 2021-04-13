@@ -123,11 +123,6 @@ $routes = [
             'id'     => '[0-9]+',
         ],
     ],
-    'dashboard-user-empresa' => [
-       'route' => '/dashboard/mantenimiento/user/obtener-sucursales',
-       'controller' => Dcontroller\UserController::class,
-       'action'     => 'obtener-sucursales',
-    ],
     'dashboard-menu-listar' => [
         'route' => '/dashboard/mantenimiento/menu',
         'controller' => Dcontroller\MenuController::class,

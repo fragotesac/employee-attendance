@@ -122,14 +122,4 @@ class PrivilegeController extends ControllerCRUD
 
       return $viewManager;
    }
-
-   public function obtenerSucursalesAction()
-   {
-      $empresa = $this->params()->fromPost('empcod', NULL);
-      $data = !empty($empresa) ? ['empcod' => $empresa] : NULL;
-      /** @var \Business\Model\Sucursal */
-      $sucursal = $this->sucursal->obtenerSucursales($data);
-
-      return new JsonModel($sucursal);
-   }
 }

@@ -9,9 +9,8 @@ use Zend\View\Model\ViewModel;
 
 class UserController extends ControllerCRUD
 {
-    public $sucursal;
 
-    public function __construct($table, $sucursal)
+    public function __construct($table)
     {
         parent::__construct($table);
         $describeColumnas = [
@@ -63,16 +62,6 @@ class UserController extends ControllerCRUD
                 'FUNC' => 'obtenerRoles',
                 'REQUIRED' => true,
             ],
-            'succod' => [
-               'PK' => 1,
-               'AI' => 0,
-               'FK' => 1,
-               'TIPO' => 'VARCHAR',
-               'FUNC' => 'obtenerSucursales',
-               'multiple' => 'multiple',
-               'REQUIRED' => true,
-            ],
-
         ];
             
         $columnasListar = [
@@ -83,7 +72,6 @@ class UserController extends ControllerCRUD
             'password' => 'Contraseña',
             'role_id' =>'Rol',
             'active' => 'Active',
-            'succod' => 'Sucursales'
         ];
         
         $indexRedirect = 'dashboard-user-listar';
@@ -100,7 +88,6 @@ class UserController extends ControllerCRUD
         $this->setDescribeColumnas($describeColumnas);
         $this->setTableIds($tableId);
         $this->setDscEliminar($dscEliminar);
-        $this->sucursal = $sucursal;
     }
 
 
@@ -115,7 +102,6 @@ class UserController extends ControllerCRUD
          //'password' => 'Contraseña',
          'role_id' =>'Rol',
          'active' => 'Active',
-         'succod' => 'Sucursales'
       ]);
 
       /** @var \Zend\View\Model\ViewModel */
@@ -185,15 +171,6 @@ class UserController extends ControllerCRUD
             'FUNC' => 'obtenerRoles',
             'REQUIRED' => true,
          ],
-         'succod' => [
-            'PK' => 1,
-            'AI' => 0,
-            'FK' => 1,
-            'TIPO' => 'VARCHAR',
-            'FUNC' => 'obtenerSucursales',
-            'multiple' => 'multiple',
-            'REQUIRED' => false,
-         ],
 
       ];
 
@@ -203,15 +180,5 @@ class UserController extends ControllerCRUD
       $viewManager->setTemplate('dashboard/user/editar');
 
       return $viewManager;
-   }
-
-   public function obtenerSucursalesAction()
-   {
-      $empresa = $this->params()->fromPost('empcod', NULL);
-      $data = !empty($empresa) ? ['empcod' => $empresa] : NULL;
-      /** @var \Business\Model\Sucursal */
-      $sucursal = $this->sucursal->obtenerSucursales($data);
-
-      return new JsonModel($sucursal);
    }
 }

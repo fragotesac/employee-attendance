@@ -114,45 +114,6 @@ class UserTable extends Model
        return $arrRol;
     }
 
-   public function obtenerSucursales($userId = NULL)
-   {
-      if (empty($userId)) {
-         $sql = $this->getSql();
-         $select = $sql
-            ->select()
-            ->from(['s' => 'sucursal'])
-            ->join(['e' => 'admmcias'], 'e.empcod = s.empcod')
-            ->order('s.sucnom');
-         $sucursales = $this->fetchSql($sql, $select);
-
-         foreach ($sucursales as $sucursal) {
-            $arrRol[$sucursal['empcod']]['options'][$sucursal['empcod'] . '-' . $sucursal['succod']] = $sucursal['sucnom'];
-            $arrRol[$sucursal['empcod']]['label'] = $sucursal['empnom'];
-            $arrRol[$sucursal['empcod']]['id'] = $sucursal['empcod'];
-         }
-      } else {
-         $sql = $this->getSql();
-         $select = $sql
-            ->select()
-            ->from(['us' => 'ususuc'])
-            ->join(['u' => 'user'], 'u.username = us.usucod')
-            ->join(['s' => 'sucursal'], 's.succod = us.loccod')
-            ->join(['e' => 'admmcias'], 'e.empcod = s.empcod')
-            ->order('s.sucnom');
-         $sucursales = $this->fetchSql($sql, $select);
-         $arrRol = $suc = [];
-         foreach ($sucursales as $sucursal) {
-            $suc[$sucursal['id']][] = ucwords(/*$sucursal['empnom'] . '-' . */$sucursal['sucnom']);
-         }
-
-         foreach ($suc as $id => $sucu) {
-            $arrRol[$id] = implode(' | ', $sucu);
-         }
-      }
-
-      return $arrRol;
-   }
-
    public function insertData($data)
    {
       $empcod = [];
@@ -169,18 +130,6 @@ class UserTable extends Model
             'usucod' => $data['username'],
          ]);
 
-         foreach ($data['succod'] as $sucursal) {
-            $suc = explode('-', $sucursal);
-            $empcod[$suc[0]] = $suc[0];
-            $this->fkTable['ususuc']->insert([
-               'siscod' => '01',
-               'usucod' => $data['username'],
-               'empcod' => $suc[0],
-               'loccod' => $suc[1],
-               'estado' => 'S'
-            ]);
-         }
-
          foreach ($empcod as $emp) {
             $this->fkTable['usuemp']->insert([
                'siscod' => '01',
@@ -189,8 +138,6 @@ class UserTable extends Model
                'estado' => 'S'
             ]);
          }
-
-         unset($data['succod']);
 
          $rs = $this->tableGateway->insert($data);
       } catch (\Exception $e) {
@@ -235,38 +182,7 @@ class UserTable extends Model
          } else {
             unset($setData['password']);
          }
-         // removing data
-         $this->fkTable['usuemp']->delete([
-            'siscod' => '01',
-            'usucod' => $data['username'],
-         ]);
-         $this->fkTable['ususuc']->delete([
-            'siscod' => '01',
-            'usucod' => $data['username'],
-         ]);
 
-         foreach ($setData['succod'] as $sucursal) {
-            $suc = explode('-', $sucursal);
-            $empcod[$suc[0]] = $suc[0];
-            $this->fkTable['ususuc']->insert([
-               'siscod' => '01',
-               'usucod' => $data['username'],
-               'empcod' => $suc[0],
-               'loccod' => $suc[1],
-               'estado' => 'S'
-            ]);
-         }
-
-         foreach ($empcod as $emp) {
-            $this->fkTable['usuemp']->insert([
-               'siscod' => '01',
-               'usucod' => $data['username'],
-               'empcod' => $emp,
-               'estado' => 'S'
-            ]);
-         }
-
-         unset($setData['succod']);
          $rs = $this->tableGateway->update($setData, $updateKeys);
       } catch (\Exception $e) {
          error_log($e->getMessage());
