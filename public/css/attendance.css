@@ -27,7 +27,7 @@ tbody tr td {
 }
 
 .item {
-    margin-left: 10px;
+    /*margin-left: 10px;*/
 }
 
 .badge-custom {
@@ -76,4 +76,23 @@ label {
 
 .w-170 {
     width: 170% !important;
+}
+
+#table-listing{
+    width: 100%;
+}
+.table-scrollable {
+    width: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin: 10px 0 ;
+}
+
+.table th{
+    white-space:nowrap;
+}
+.table td{
+    vertical-align:top;
+    border-bottom: 1px solid #ddd;
+    padding: 2px 5px;
 }
