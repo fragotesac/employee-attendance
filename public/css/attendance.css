@@ -73,3 +73,7 @@ label {
 .badge {
     cursor: pointer;
 }
+
+.w-170 {
+    width: 170% !important;
+}
