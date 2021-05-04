@@ -36,36 +36,45 @@ array_sort_by_column($headers);
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <h1 class="card-title"><i class="fa fa-list-alt" aria-hidden="true"></i>&nbsp;Asitencias</h1>
+                            <h1 class="card-title"><i class="fa fa-list-alt" aria-hidden="true"></i>&nbsp;Asistencias</h1>
                             <h2 class="card-subtitle">Listado</h2>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 col-sm-12 col-xs-4 form-group top_search">
+                        <div class="col-md-6 col-sm-12 col-xs-6 form-group top_search">
                             <form method="POST" class="form-inline">
-                                <div class="form-group">
+                                <div class="form-group mr-3">
                                     <label for="startDate">Start Date</label>
-                                    <input id="startDate" name="start_date" type="text" class="form-control" value="<?= isset($_POST['start_date']) ? $_POST['start_date'] : '' ?>" />
+                                    <input id="startDate" name="start_date" type="text" class="form-control" value="<?= $this->startDate ?>" />
                                 </div>
-                                <div class="form-group ml-3">
+                                <div class="form-group mr-3">
                                     <label for="endDate">End Date</label>
-                                    <input id="endDate" name="end_date" type="text" class="form-control" value="<?= isset($_POST['end_date']) ? $_POST['end_date'] : '' ?>" />
-                                    <button class="btn btn-outline-secondary" type="submit">
+                                    <input id="endDate" name="end_date" type="text" class="form-control" value="<?= $this->endDate ?>" />
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-outline-secondary mt-4 w-170" type="submit">
                                         <i class="fa fa-search">&nbsp;</i>
                                     </button>
                                 </div>
                             </form>
                         </div>
-                        <div class="clearfix"></div>
 
-                        <div class="col-md-6 col-sm-6 col-xs-12 form-group top_search form-inline">
+                        <div class="col-md-6 col-sm-12 col-xs-6 form-group top_search form-inline">
                             <div class="form-group">
                                 <label>Legend</label>
                                 <div class="form-control h-100" style="padding: 0.5rem .75rem">
-                                    <span class="badge legend-badge badge-success"> </span> <span class="vertical-alg">ENTRADA</span>
-                                    <span class="badge legend-badge badge-info ml-4"> </span> <span class="vertical-alg">SALIDA ALMUERZO</span>
-                                    <span class="badge legend-badge badge-warning ml-4"> </span> <span class="vertical-alg">REGRESO ALMUERZO</span>
-                                    <span class="badge legend-badge badge-secondary ml-4"> </span> <span class="vertical-alg">SALIDA</span>
+                                    <div class="mr-3" style="display: inline-block">
+                                        <span class="badge legend-badge badge-success"> </span> <span class="vertical-alg">ENTRADA</span>
+                                    </div>
+                                    <div class="mr-3" style="display: inline-block">
+                                        <span class="badge legend-badge badge-info"> </span> <span class="vertical-alg">SALIDA ALMUERZO</span>
+                                    </div>
+                                    <div class="mr-3" style="display: inline-block">
+                                        <span class="badge legend-badge badge-warning"> </span> <span class="vertical-alg">REGRESO ALMUERZO</span>
+                                    </div>
+                                    <div class="mr-3" style="display: inline-block">
+                                        <span class="badge legend-badge badge-secondary"> </span> <span class="vertical-alg">SALIDA</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -74,69 +83,63 @@ array_sort_by_column($headers);
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="x_panel">
                         <div class="x_content">
-                            <div class="table-responsive">
-                                <?php
-                                    if (count($headers) <= 0) {
+                            <div id="table-listing">
+                                <div class="table-scrollable">
+                                    <?php if (count($headers) <= 0) {
                                         echo '<b>No se encontraron resultados</b>';
-                                    } else {
-                                ?>
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th width="30" class="main-td">#</th>
-                                        <th width="200" class="main-td">
-                                            <span class="item">First name</span>
-                                        </th>
-                                        <?php
-                                            foreach($headers as $header) {
-                                        ?>
-                                            <th width="150" class="main-td">
-                                                <span class="item"><?= $header ?></span>
-                                            </th>
-                                        <?php
-                                            }
-                                        ?>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php
-                                    $n = 1;
-                                    foreach ($this->dayList as $userId => $attendances) {
-                                    ?>
+                                    } else { ?>
+                                    <table class="table" data-count-fixed-columns="2" cellpadding="0" cellspacing="0">
+                                        <thead>
                                         <tr>
-                                            <td width="30" class="main-td">
-                                                <span class="item"><?= $n ?></span>
-                                            </td>
-                                            <td width="200">
-                                                <span class="item"><?= $this->dayList[$userId]['full_name'] ?></span>
-                                            </td>
+                                            <th class="main-td" width="30">#</th>
+                                            <th class="main-td" width="200"><span class="item">First name</span></th>
+                                            <?php foreach($headers as $header) { ?>
+                                                <th class="main-td">
+                                                    <span class="item"><?= $header ?></span>
+                                                </th>
+                                            <?php } ?>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                        $n = 1;
+                                        foreach ($this->dayList as $userId => $attendances) {
+                                            ?>
+                                            <tr>
+                                                <td  class="main-td">
+                                                    <span class="item"><?= $n ?></span>
+                                                </td>
+                                                <td >
+                                                    <span class="item"><?= $this->dayList[$userId]['full_name'] ?></span>
+                                                </td>
 
-                                            <?php foreach ($headers as $date => $dateDesc) {
-                                                    echo '<td width="150">';
+                                                <?php foreach ($headers as $date => $dateDesc) {
+                                                    echo '<td>';
                                                     if (isset($this->dayList[$userId][$date])) {
                                                         foreach ($this->dayList[$userId][$date] as $item) {
-                                            ?>
+                                                            ?>
                                                             <?php $badgeType = ['#28a745', '#6c757d', '#17a2b8', '#ffc107']; ?>
                                                             <span class="badge badge-light badge-custom"
                                                                   tooltip="<?= $item['observacion'] ?>"
                                                                   style="border-left-color: <?= $badgeType[$item['status'] - 1] ?>;">
                                                                 <?= $item['hour'] ?>
                                                             </span>
-                                            <?php
+                                                            <?php
                                                         }
                                                     }
                                                     echo '</td>';
                                                 }
 
-                                            ?>
-                                        </tr>
-                                    <?php
-                                        $n += 1;
-                                    }
-                                    ?>
-                                    </tbody>
-                                </table>
-                                <?php } ?>
+                                                ?>
+                                            </tr>
+                                            <?php
+                                            $n += 1;
+                                        }
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                    <?php } ?>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -147,21 +150,100 @@ array_sort_by_column($headers);
     <!-- End PAge Content -->
 </div>
 <script>
-    $(function () {
-        var sd = new Date(), ed = new Date();
+    function tableScroll(mainTable)
+    {
+        let currentTable = $('.table', mainTable);
+        let fixedColumns = currentTable.attr('data-count-fixed-columns')
 
-        $('#startDate').datetimepicker({
-            pickTime: false,
-            format: "DD-MM-YYYY",
-            defaultDate: sd,
-            maxDate: ed
+        if (fixedColumns > 0) {
+            let wrapper = $('.table-scrollable', mainTable);
+            let wrapperMarginLeft = 0;
+            let tableColumnsWidth = [];
+            let tableColumnsMargin = [];
+            let otherTdN = 0;
+            let otherTdW = 0;
+
+            //calculate wrapper margin and fixed column width
+            $('th', currentTable).each(function(index){
+                if(index < fixedColumns) {
+                    wrapperMarginLeft += $(this).outerWidth();
+                    tableColumnsWidth[index] = $(this).outerWidth();
+                } else {
+                    otherTdN += 1;
+                    otherTdW += $(this).outerWidth();
+                }
+            });
+
+            //calcualte margin for each column
+            $.each(tableColumnsWidth, function(key) {
+                if (key === 0) {
+                    tableColumnsMargin[key] = wrapperMarginLeft;
+                } else {
+                    let nextM = 0;
+                    $.each(tableColumnsWidth, function(nextKey, nextValue) {
+                        if (nextKey < key) {
+                            nextM += nextValue;
+                        }
+                    });
+
+                    tableColumnsMargin[key] = wrapperMarginLeft - nextM;
+                }
+            });
+
+            //set wrapper margin
+            if (wrapperMarginLeft > 0) {
+                wrapper.css('cssText', 'margin-left:' + wrapperMarginLeft + 'px !important; width: auto')
+            }
+
+            //set position for fixed columns
+            $('tr', currentTable).each(function(){
+                //get current row height
+                let currentRowH = $(this).outerHeight();
+                let currentRowW = $(this).outerWidth();
+
+                $('th, td', $(this)).each(function(index){
+                    //set row height for all cells
+                    $(this).css('width', currentRowW / otherTdN);
+                    $(this).css('height', currentRowH);
+
+                    //set position
+                    if(index < fixedColumns) {
+                        $(this).css('position','absolute')
+                            .css('margin-left','-' + tableColumnsMargin[index] + 'px')
+                            .css('width', tableColumnsWidth[index]);
+
+                        $(this).addClass('table-fixed-cell')
+                    }
+                })
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        $(function () {
+            tableScroll($('#table-listing'));
+
+            var sd = new Date(), ed = new Date();
+
+            $('#startDate').datetimepicker({
+                pickTime: false,
+                format: "DD-MM-YYYY",
+                defaultDate: sd,
+                maxDate: ed
+            });
+
+            $('#endDate').datetimepicker({
+                pickTime: false,
+                format: "DD-MM-YYYY",
+                defaultDate: ed,
+                minDate: sd
+            });
         });
+    });
 
-        $('#endDate').datetimepicker({
-            pickTime: false,
-            format: "DD-MM-YYYY",
-            defaultDate: ed,
-            minDate: sd
+    $(window).resize(function(){
+        $(function () {
+            tableScroll($('#table-listing'))
         });
     });
 </script>

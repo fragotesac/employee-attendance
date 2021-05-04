@@ -280,8 +280,8 @@ $routes = [
         'controller' => Dcontroller\NotificaController::class,
         'action'     => 'agregar',
     ],
-    'dashboard-asistencias' => [
-        'route' => '/dashboard/asistencias',
+    'dashboard-reportes' => [
+        'route' => '/dashboard/reportes',
         'controller' => Dcontroller\AsistenciasController::class,
         'action'     => 'index',
     ],

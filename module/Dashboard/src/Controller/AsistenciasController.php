@@ -19,12 +19,12 @@ class AsistenciasController extends AbstractActionController
     {
         $request = $this->getRequest();
         $startDate = strtotime('last monday midnight', time());
-        $endDate = strtotime('next sunday', $startDate);
+        $endDate = strtotime('next sunday', strtotime(date('d-m-Y 23:59:59', $startDate)));
 
         if ($request->isPost()) {
             $post = $request->getPost();
             $startDate = strtotime($post->start_date);
-            $endDate = strtotime($post->end_date);
+            $endDate = strtotime(date('d-m-Y 23:59:59', strtotime($post->end_date)));
         }
 
         $dayAttendance = $this->dayAttendance(
@@ -32,7 +32,9 @@ class AsistenciasController extends AbstractActionController
         );
 
         return new ViewModel([
-            'dayList' => $dayAttendance
+            'dayList' => $dayAttendance,
+            'startDate' => date('d-m-Y', $startDate),
+            'endDate' => date('d-m-Y', $endDate),
         ]);
     }
 

@@ -224,3 +224,6 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+--menu
+INSERT INTO dash.menu (id, url, label, parent, module_id, mostrar, permiso, route) VALUES (24, '/dashboard/reportes', '<i class="fa fa-calendar"></i> Reportes', null, 1, 1, 4, 'dashboard-reportes');
